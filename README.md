@@ -49,11 +49,17 @@ Tests:
 
 ## Setup
 
+Prerequisites:
+- Python 3.7 or higher
+- Required packages: `numpy`, `pandas`, `h5py`, `pyarrow`, `msgpack`
+
 ```bash
 python -m venv venv
 # Windows
 venv\Scripts\activate
 pip install -r requirements.txt
+# Or install core packages directly:
+pip install numpy pandas h5py pyarrow msgpack
 ```
 
 ## Training
@@ -129,4 +135,3 @@ Sample request payload:
 ```bash
 pytest
 ```
-
