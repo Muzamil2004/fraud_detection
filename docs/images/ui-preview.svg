@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#edf2f7"/>
+  <rect x="40" y="36" width="1120" height="628" rx="16" ry="16" fill="#ffffff" stroke="#c8d4e1"/>
+  <rect x="68" y="64" width="1064" height="94" rx="12" ry="12" fill="#f4f8fc" stroke="#d3deea"/>
+  <text x="92" y="102" font-family="Segoe UI, Arial, sans-serif" font-size="26" fill="#19344e" font-weight="700">Risk Intelligence Console</text>
+  <text x="92" y="132" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#4d6780">FastAPI-backed dashboard for fraud scoring and monitoring</text>
+
+  <rect x="68" y="184" width="520" height="204" rx="12" ry="12" fill="#fdfefe" stroke="#d7e1eb"/>
+  <text x="90" y="218" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#19344e" font-weight="700">Service Status</text>
+  <rect x="90" y="238" width="150" height="60" rx="10" ry="10" fill="#f3f8ff" stroke="#d7e4f2"/>
+  <rect x="252" y="238" width="150" height="60" rx="10" ry="10" fill="#f3f8ff" stroke="#d7e4f2"/>
+  <rect x="414" y="238" width="150" height="60" rx="10" ry="10" fill="#f3f8ff" stroke="#d7e4f2"/>
+  <text x="102" y="273" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#2f4962">Status: OK</text>
+  <text x="264" y="273" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#2f4962">Model: xgboost</text>
+  <text x="426" y="273" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#2f4962">Threshold: 0.50</text>
+
+  <rect x="612" y="184" width="520" height="204" rx="12" ry="12" fill="#fdfefe" stroke="#d7e1eb"/>
+  <text x="634" y="218" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#19344e" font-weight="700">Model Metadata</text>
+  <rect x="634" y="238" width="476" height="130" rx="10" ry="10" fill="#f8fbff" stroke="#d7e4f2"/>
+  <text x="654" y="272" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#2f4962">Target: is_fraud</text>
+  <text x="654" y="298" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#2f4962">Preview: F1 and PR-AUC by model</text>
+  <text x="654" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#2f4962">logistic_regression | 0.4427 | 0.7451</text>
+  <text x="654" y="350" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#2f4962">xgboost             | 0.8823 | 0.9727</text>
+
+  <rect x="68" y="414" width="520" height="222" rx="12" ry="12" fill="#fdfefe" stroke="#d7e1eb"/>
+  <text x="90" y="448" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#19344e" font-weight="700">Single Transaction Scoring</text>
+  <rect x="90" y="464" width="478" height="120" rx="10" ry="10" fill="#f8fbff" stroke="#d7e4f2"/>
+  <text x="106" y="492" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#2f4962">amount, hour, category, foreign_transaction, ...</text>
+  <rect x="90" y="596" width="180" height="24" rx="12" ry="12" fill="#0f5f8c"/>
+  <text x="132" y="613" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#ffffff" font-weight="700">Score Transaction</text>
+
+  <rect x="612" y="414" width="520" height="222" rx="12" ry="12" fill="#fdfefe" stroke="#d7e1eb"/>
+  <text x="634" y="448" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#19344e" font-weight="700">Batch Scoring</text>
+  <rect x="634" y="464" width="478" height="120" rx="10" ry="10" fill="#f8fbff" stroke="#d7e4f2"/>
+  <text x="650" y="492" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#2f4962">JSON array input, threshold override, risk summary</text>
+  <rect x="634" y="596" width="120" height="24" rx="12" ry="12" fill="#1f86b7"/>
+  <text x="668" y="613" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#ffffff" font-weight="700">Run Batch</text>
+</svg>

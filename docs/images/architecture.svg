@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640">
+  <rect width="1200" height="640" fill="#eef3f8"/>
+  <text x="40" y="56" font-family="Segoe UI, Arial, sans-serif" font-size="34" fill="#10243b" font-weight="700">Credit Card Fraud Detection - System Architecture</text>
+
+  <rect x="60" y="110" rx="16" ry="16" width="280" height="120" fill="#ffffff" stroke="#9bb4cc" stroke-width="2"/>
+  <text x="86" y="158" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#15314d" font-weight="700">Dataset (CSV)</text>
+  <text x="86" y="190" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#37536f">data/credit_card_fraud_10k.csv</text>
+
+  <rect x="410" y="80" rx="16" ry="16" width="350" height="170" fill="#ffffff" stroke="#9bb4cc" stroke-width="2"/>
+  <text x="438" y="126" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#15314d" font-weight="700">Training Pipeline</text>
+  <text x="438" y="160" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#37536f">Feature Engineering + Preprocessing</text>
+  <text x="438" y="186" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#37536f">Stratified CV + RandomizedSearchCV</text>
+  <text x="438" y="212" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#37536f">Best Model Selection</text>
+
+  <rect x="830" y="110" rx="16" ry="16" width="290" height="120" fill="#ffffff" stroke="#9bb4cc" stroke-width="2"/>
+  <text x="858" y="158" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#15314d" font-weight="700">Model Artifact</text>
+  <text x="858" y="190" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#37536f">model.pkl (joblib)</text>
+
+  <rect x="410" y="320" rx="16" ry="16" width="350" height="190" fill="#ffffff" stroke="#9bb4cc" stroke-width="2"/>
+  <text x="438" y="366" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#15314d" font-weight="700">FastAPI Inference Service</text>
+  <text x="438" y="400" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#37536f">/health, /model-info</text>
+  <text x="438" y="426" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#37536f">/predict, /predict/batch</text>
+  <text x="438" y="452" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#37536f">runtime cache + thresholding</text>
+
+  <rect x="830" y="350" rx="16" ry="16" width="290" height="140" fill="#ffffff" stroke="#9bb4cc" stroke-width="2"/>
+  <text x="858" y="394" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#15314d" font-weight="700">Frontend UI</text>
+  <text x="858" y="426" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#37536f">Operational dashboard</text>
+  <text x="858" y="452" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#37536f">Single + Batch scoring</text>
+
+  <line x1="340" y1="170" x2="410" y2="170" stroke="#3f6f95" stroke-width="3"/>
+  <polygon points="410,170 398,162 398,178" fill="#3f6f95"/>
+
+  <line x1="760" y1="170" x2="830" y2="170" stroke="#3f6f95" stroke-width="3"/>
+  <polygon points="830,170 818,162 818,178" fill="#3f6f95"/>
+
+  <line x1="975" y1="230" x2="975" y2="350" stroke="#3f6f95" stroke-width="3"/>
+  <polygon points="975,350 967,338 983,338" fill="#3f6f95"/>
+
+  <line x1="830" y1="400" x2="760" y2="400" stroke="#3f6f95" stroke-width="3"/>
+  <polygon points="760,400 772,392 772,408" fill="#3f6f95"/>
+
+  <line x1="585" y1="250" x2="585" y2="320" stroke="#3f6f95" stroke-width="3"/>
+  <polygon points="585,320 577,308 593,308" fill="#3f6f95"/>
+</svg>
