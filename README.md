@@ -1,36 +1,51 @@
 # Credit Card Fraud Detection System
 
-Production-oriented fraud detection project using classical ML and threshold/cost tuning.
+End-to-end fraud detection project with engineered behavioral features, model benchmarking, threshold tuning, and a FastAPI inference service.
 
-## Project Structure
+## Overview
 
-```text
-fraud-detection-system/
-|
-|-- data/
-|-- notebooks/
-|   |-- eda.ipynb
-|
-|-- src/
-|   |-- preprocessing.py
-|   |-- train.py
-|   |-- evaluate.py
-|   |-- threshold_tuning.py
-|   |-- cost_analysis.py
-|
-|-- model.pkl
-|-- app.py
-|-- requirements.txt
-|-- README.md
-```
+This repository provides:
+- A training pipeline for imbalanced fraud data.
+- Feature engineering focused on temporal and behavioral risk signals.
+- Automated model benchmarking with hyperparameter search.
+- Threshold and cost analysis utilities for business-driven decision tuning.
+- A modular FastAPI service for single and batch predictions.
+- Unit tests for core preprocessing, training utilities, and API runtime behavior.
 
-## Tech Stack
+## Architecture
 
-- Data: Pandas, NumPy
-- Models: Logistic Regression, Random Forest, XGBoost
-- Imbalance Handling: SMOTE, class-weight tuning, threshold tuning
-- Metrics: Precision, Recall, F1, ROC-AUC, PR-AUC, cost-based analysis
-- Deployment: FastAPI, Joblib, Swagger docs
+Core modules:
+- `src/preprocessing.py`: data split, preprocessing, behavioral feature engineering.
+- `src/train.py`: model search, stratified CV, benchmarking, artifact export.
+- `src/evaluate.py`: offline evaluation at configurable thresholds.
+- `src/threshold_tuning.py`: threshold optimization by F1 or custom cost.
+- `src/cost_analysis.py`: threshold-vs-cost report generation.
+- `src/api/schemas.py`: API request/response schemas.
+- `src/api/runtime.py`: model artifact loading, runtime cache, probability inference.
+- `src/api/routes.py`: API endpoint definitions.
+
+Interface:
+- `app.py`: API bootstrap and router wiring.
+
+Tests:
+- `tests/test_preprocessing.py`
+- `tests/test_train.py`
+- `tests/test_api_runtime.py`
+
+## Technical Highlights
+
+- Models:
+  - Logistic Regression
+  - Random Forest
+  - HistGradientBoosting
+  - MLPClassifier
+  - Soft Voting Ensemble
+  - XGBoost
+  - Optional: LightGBM, CatBoost (auto-included if installed)
+- Validation: Stratified K-Fold with `RandomizedSearchCV`
+- Optimization metric: PR-AUC (`average_precision`)
+- Imbalance handling: SMOTE + class-weighted learners
+- Artifact output: `model.pkl` with selected model, metrics, and benchmark metadata
 
 ## Setup
 
@@ -41,39 +56,40 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Train
+## Training
 
 ```bash
 python -m src.train --data data/credit_card_fraud_10k.csv --output model.pkl
 ```
 
-Optional without SMOTE:
+Optional tuning controls:
 
 ```bash
+python -m src.train --cv-folds 5 --search-iter 20
 python -m src.train --no-smote
 ```
 
-## Evaluate
+## Evaluation and Threshold Tuning
+
+Evaluate trained model:
 
 ```bash
 python -m src.evaluate --model model.pkl --data data/credit_card_fraud_10k.csv
 ```
 
-## Threshold Tuning
-
-Maximize F1:
+Tune threshold for best F1:
 
 ```bash
 python -m src.threshold_tuning --mode f1
 ```
 
-Minimize custom business cost:
+Tune threshold for minimum business cost:
 
 ```bash
 python -m src.threshold_tuning --mode cost --fp-cost 1 --fn-cost 15
 ```
 
-## Cost Analysis Table
+Generate cost analysis table:
 
 ```bash
 python -m src.cost_analysis --fp-cost 1 --fn-cost 15 --output data/cost_analysis.csv
@@ -85,12 +101,15 @@ python -m src.cost_analysis --fp-cost 1 --fn-cost 15 --output data/cost_analysis
 uvicorn app:app --reload
 ```
 
-- Frontend UI: http://127.0.0.1:8000/ui
-- Swagger UI: http://127.0.0.1:8000/docs
-- Health: GET `/`
-- Prediction: POST `/predict`
+Endpoints:
+- Swagger: `http://127.0.0.1:8000/docs`
+- Frontend UI: `http://127.0.0.1:8000/ui`
+- Health: `GET /health`
+- Model info: `GET /model-info`
+- Predict: `POST /predict`
+- Batch predict: `POST /predict/batch`
 
-## Sample Prediction Payload
+Sample request payload:
 
 ```json
 {
@@ -104,3 +123,10 @@ uvicorn app:app --reload
   "cardholder_age": 40
 }
 ```
+
+## Tests
+
+```bash
+pytest
+```
+
