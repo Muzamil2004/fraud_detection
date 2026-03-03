@@ -25,6 +25,13 @@ function badgeClass(prob, threshold) {
   return "ok";
 }
 
+function setLoading(buttonId, loadingText, idleText, isLoading) {
+  const btn = document.getElementById(buttonId);
+  if (!btn) return;
+  btn.disabled = isLoading;
+  btn.textContent = isLoading ? loadingText : idleText;
+}
+
 async function callApi(url, options) {
   const response = await fetch(url, options);
   const text = await response.text();
@@ -53,16 +60,48 @@ function renderError(container, err) {
 
 async function loadHealth() {
   try {
-    const data = await callApi("/", { method: "GET" });
+    const data = await callApi("/health", { method: "GET" });
+    const info = await callApi("/model-info", { method: "GET" });
+
     document.getElementById("healthStatus").textContent = data.status || "-";
     document.getElementById("healthModel").textContent = data.model || "-";
     document.getElementById("healthThreshold").textContent = data.threshold ?? "-";
     document.getElementById("healthPath").textContent = data.model_path || "-";
+
+    document.getElementById("modelTarget").textContent = info.target_col || "-";
+    const metricKeys = Object.keys(info.available_metrics || {});
+    document.getElementById("metricCount").textContent = `${metricKeys.length} model(s)`;
+
+    const modelInfoBox = document.getElementById("modelInfoBox");
+    if (metricKeys.length === 0) {
+      modelInfoBox.className = "result empty";
+      modelInfoBox.textContent = "No metrics available in artifact.";
+      return;
+    }
+    const preview = metricKeys.slice(0, 3).map((name) => {
+      const m = info.available_metrics[name] || {};
+      return `<tr><td>${escapeHtml(name)}</td><td>${Number(m.f1 || 0).toFixed(4)}</td><td>${Number(m.pr_auc || 0).toFixed(4)}</td></tr>`;
+    }).join("");
+    modelInfoBox.className = "result";
+    modelInfoBox.innerHTML = `
+      <p class="result-title">Training Snapshot</p>
+      <div class="mini-table">
+        <table>
+          <thead><tr><th>Model</th><th>F1</th><th>PR-AUC</th></tr></thead>
+          <tbody>${preview}</tbody>
+        </table>
+      </div>
+    `;
   } catch (err) {
     document.getElementById("healthStatus").textContent = "Error";
     document.getElementById("healthModel").textContent = "-";
     document.getElementById("healthThreshold").textContent = "-";
     document.getElementById("healthPath").textContent = err.message || String(err);
+    document.getElementById("modelTarget").textContent = "-";
+    document.getElementById("metricCount").textContent = "-";
+    const modelInfoBox = document.getElementById("modelInfoBox");
+    modelInfoBox.className = "result";
+    modelInfoBox.innerHTML = `<p class="result-title">Metadata Load Failed</p><p class="result-text">${escapeHtml(err.message || String(err))}</p>`;
   }
 }
 
@@ -70,6 +109,7 @@ async function handlePredict(event) {
   event.preventDefault();
   const form = event.currentTarget;
   const output = document.getElementById("predictOutput");
+  setLoading("predictBtn", "Scoring...", "Score Transaction", true);
   output.className = "result";
   output.innerHTML = "<p class='result-text'>Scoring transaction...</p>";
 
@@ -104,12 +144,15 @@ async function handlePredict(event) {
     `;
   } catch (err) {
     renderError(output, err);
+  } finally {
+    setLoading("predictBtn", "Scoring...", "Score Transaction", false);
   }
 }
 
 async function handleBatch(event) {
   event.preventDefault();
   const output = document.getElementById("batchOutput");
+  setLoading("batchBtn", "Running...", "Run Batch", true);
   output.className = "result";
   output.innerHTML = "<p class='result-text'>Running batch scoring...</p>";
 
@@ -122,6 +165,7 @@ async function handleBatch(event) {
     payload = JSON.parse(raw);
   } catch (err) {
     renderError(output, new Error(`Invalid JSON payload: ${err.message}`));
+    setLoading("batchBtn", "Running...", "Run Batch", false);
     return;
   }
 
@@ -167,6 +211,8 @@ async function handleBatch(event) {
     `;
   } catch (err) {
     renderError(output, err);
+  } finally {
+    setLoading("batchBtn", "Running...", "Run Batch", false);
   }
 }
 

@@ -3,66 +3,84 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fraud Scoring Workbench</title>
+  <title>Fraud Risk Intelligence Console</title>
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
-  <div class="mesh mesh-a"></div>
-  <div class="mesh mesh-b"></div>
+  <div class="bg-grid"></div>
 
-  <main class="layout">
-    <header class="hero">
-      <p class="eyebrow">ML Inference Dashboard</p>
-      <h1>Fraud Scoring Workbench</h1>
-      <p class="subtitle">Operational console for model health, single scoring, and batch scoring.</p>
-      <div class="quick-links">
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Fraud Detection Platform</p>
+        <h1>Risk Intelligence Console</h1>
+        <p class="subtitle">Monitor service health and score transactions with configurable thresholds.</p>
+      </div>
+      <nav class="quick-links">
         <a href="/docs" target="_blank" rel="noreferrer">Swagger</a>
         <a href="/redoc" target="_blank" rel="noreferrer">ReDoc</a>
-        <a href="/openapi.json" target="_blank" rel="noreferrer">OpenAPI</a>
-      </div>
+        <a href="/api/openapi.json" target="_blank" rel="noreferrer">OpenAPI</a>
+      </nav>
     </header>
 
-    <section class="card">
-      <div class="card-head">
-        <h2>Service Health</h2>
-        <button id="refreshHealth" type="button">Refresh</button>
-      </div>
-      <div class="metrics">
-        <article class="metric">
-          <p class="metric-label">Status</p>
-          <p id="healthStatus" class="metric-value">Loading...</p>
-        </article>
-        <article class="metric">
-          <p class="metric-label">Model</p>
-          <p id="healthModel" class="metric-value">-</p>
-        </article>
-        <article class="metric">
-          <p class="metric-label">Threshold</p>
-          <p id="healthThreshold" class="metric-value">-</p>
-        </article>
-      </div>
-      <p class="path-line">Model Path: <span id="healthPath">-</span></p>
+    <section class="health">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Service Status</h2>
+          <button id="refreshHealth" type="button">Refresh</button>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <span>Status</span>
+            <strong id="healthStatus">Loading...</strong>
+          </div>
+          <div class="stat">
+            <span>Model</span>
+            <strong id="healthModel">-</strong>
+          </div>
+          <div class="stat">
+            <span>Threshold</span>
+            <strong id="healthThreshold">-</strong>
+          </div>
+        </div>
+        <p class="path-line">Artifact: <span id="healthPath">-</span></p>
+      </article>
+
+      <article class="panel">
+        <h2>Model Metadata</h2>
+        <div class="stats">
+          <div class="stat">
+            <span>Target Column</span>
+            <strong id="modelTarget">-</strong>
+          </div>
+          <div class="stat">
+            <span>Available Metrics</span>
+            <strong id="metricCount">-</strong>
+          </div>
+        </div>
+        <div id="modelInfoBox" class="result empty">Load metadata to view training metrics snapshot.</div>
+      </article>
     </section>
 
-    <section class="card">
-      <h2>Single Prediction</h2>
-      <form id="predictForm" class="grid">
-        <label>Amount<input name="amount" type="number" min="0.01" step="0.01" value="2499.5" required /></label>
-        <label>Transaction Hour<input name="transaction_hour" type="number" min="0" max="23" value="2" required /></label>
+    <section class="panel">
+      <h2>Single Transaction Scoring</h2>
+      <form id="predictForm" class="form-grid">
+        <label>Amount (USD)<input name="amount" type="number" min="0.01" step="0.01" value="2499.5" required /></label>
+        <label>Hour (0-23)<input name="transaction_hour" type="number" min="0" max="23" value="2" required /></label>
         <label>Merchant Category<input name="merchant_category" type="text" value="electronics" required /></label>
-        <label>Foreign Transaction (0/1)<input name="foreign_transaction" type="number" min="0" max="1" value="1" required /></label>
+        <label>Foreign Txn (0/1)<input name="foreign_transaction" type="number" min="0" max="1" value="1" required /></label>
         <label>Location Mismatch (0/1)<input name="location_mismatch" type="number" min="0" max="1" value="1" required /></label>
-        <label>Device Trust Score<input name="device_trust_score" type="number" min="0" max="100" step="0.1" value="22.5" required /></label>
-        <label>Velocity Last 24h<input name="velocity_last_24h" type="number" min="0" value="9" required /></label>
+        <label>Device Trust (0-100)<input name="device_trust_score" type="number" min="0" max="100" step="0.1" value="22.5" required /></label>
+        <label>Velocity (24h)<input name="velocity_last_24h" type="number" min="0" value="9" required /></label>
         <label>Cardholder Age<input name="cardholder_age" type="number" min="18" max="120" value="34" required /></label>
-        <label>Custom Threshold (optional)<input name="custom_threshold" type="number" min="0" max="1" step="0.01" placeholder="e.g. 0.6" /></label>
-        <button type="submit" class="full">Predict</button>
+        <label>Custom Threshold (optional)<input name="custom_threshold" type="number" min="0" max="1" step="0.01" placeholder="e.g. 0.60" /></label>
+        <button id="predictBtn" type="submit" class="full">Score Transaction</button>
       </form>
-      <div id="predictOutput" class="result empty">Run a prediction to see the decision summary.</div>
+      <div id="predictOutput" class="result empty">Run scoring to view probability, decision, and confidence band.</div>
     </section>
 
-    <section class="card">
-      <h2>Batch Prediction</h2>
+    <section class="panel">
+      <h2>Batch Scoring</h2>
       <form id="batchForm">
         <label for="batchInput">JSON Array Payload</label>
         <textarea id="batchInput" rows="12">[
@@ -89,10 +107,10 @@
 ]</textarea>
         <div class="row">
           <label>Custom Threshold (optional)<input id="batchThreshold" type="number" min="0" max="1" step="0.01" /></label>
-          <button type="submit">Run Batch</button>
+          <button id="batchBtn" type="submit">Run Batch</button>
         </div>
       </form>
-      <div id="batchOutput" class="result empty">Run batch scoring to view summarized results.</div>
+      <div id="batchOutput" class="result empty">Run batch scoring to get aggregate risk summary and sample decisions.</div>
     </section>
   </main>
 

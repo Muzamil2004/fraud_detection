@@ -31,6 +31,7 @@ app = FastAPI(
     title="Credit Card Fraud Detection API",
     description="Predicts fraud probability and decision with tuned threshold.",
     version="1.1.0",
+    openapi_url="/api/openapi.json",
 )
 
 if STATIC_DIR.exists():
